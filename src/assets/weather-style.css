@@ -1,0 +1,32 @@
+/*change theme*/
+main {
+  height: 100vh !important;
+}
+.white {
+  transition: 0.2s linear;
+  background: rgb(185, 185, 185);
+  color: black;
+}
+.black {
+  transition: 0.2s linear;
+  background: black;
+  color: white;
+}
+
+.container{
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.item{
+  border: 1px solid green;
+  display: flex;
+  padding: 50px
+}
+.item > *{
+  margin: 15px;
+  border: 1px solid red;
+
+}

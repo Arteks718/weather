@@ -25,22 +25,78 @@
         </div>
       </div>
       <div class="item">
-        <div>
-          <p>{{ sys.country }}</p>
-          <i class=""></i>
-          <i class="fas fa-temperature-low" style="font-size: 24px"></i>
-          <p>{{ weather.id }}</p>
-          <p>{{ weather.main }}</p>
-          <p>{{ weather.description }}</p>
-        </div>
-        <div></div>
-        <div></div>
+        <table >
+          <tr >
+            <td>{{ localWeather.name }}</td>
+            <td>{{ localT.name }}</td>
+            <td v-if="testD">{{ localT.weather[0].main }}</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
       </div>
     </div>
   </main>
 </template>
 
 <script>
+const LOCAL_DATA_WEATHER = {
+  coord: {
+    lon: "",
+    lat: "",
+  },
+  weather: {
+    id: "",
+    main: "",
+    description: "",
+    icon: "",
+  },
+  base: "",
+  main: {
+    temp: "",
+    feels_like: "",
+    temp_min: "",
+    temp_max: "",
+    pressure: "",
+    humidity: "",
+  },
+  wind: {
+    speed: "",
+    deg: "",
+    gust: "",
+  },
+  dt: "",
+  sys: {
+    country: "",
+    sunrise: "",
+    sunset: "",
+  },
+  name: "",
+};
+
 export default {
   props: {
     id: "",
@@ -48,13 +104,10 @@ export default {
   data() {
     return {
       API_KEY: "7914d5a440960cfd5df3bd0388a7ad0f",
-      localWeather: {},
-      coord: {},
-      weather: {},
-      main: {},
-      wind: {},
-      sys: {},
+      localWeather: { ...LOCAL_DATA_WEATHER },
+      localT: {},
       theme: "",
+      testD: true,
       city: "",
       cities: [],
       msg: "",
@@ -72,14 +125,8 @@ export default {
             `https://api.openweathermap.org/data/2.5/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=${this.API_KEY}&lang=ua&units=metric`
           )
           .then((response) => {
-            this.localWeather = { ...response.data };
-            this.weather = response.data.weather[0];
-            this.coord = response.data.coord;
-            this.main = response.data.main;
-            this.wind = response.data.wind;
-            this.clound = response.data.clound;
-            this.sys = response.data.sys;
-            console.log(this.localWeather);
+            this.localT = { ...response.data };
+            console.log(this.localWeather.coord);
           });
       });
     } else {
@@ -122,5 +169,5 @@ export default {
 </script>
 
 <style scoped>
-@import "../assets/app-style.css";
+@import "../assets/weather-style.css";
 </style>
