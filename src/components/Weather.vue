@@ -1,102 +1,62 @@
 <template>
-  <main :class="theme">
+  <main :class="theme" v-if="this.localWeather?.name">
     <button @click="changeTheme">Змінити тему</button>
 
     <div class="container">
       <div class="item">
         <div class="item-add-city">
           <h3>ДОДАВАННЯ МІСТА</h3>
-          <p>ВВЕДІТЬ НАЗВУ МІСТА:</p>
+          <label>ВВЕДІТЬ НАЗВУ МІСТА:</label>
           <input type="text" v-model="city" />
           <button @click="addCity">Додати</button>
           <div class="msg" v-if="msg">{{ msg }}</div>
         </div>
         <div class="item-choose-city">
           <h3>ВИБІР МІСТА</h3>
-          <p>ОБЕРІТЬ МІСТО:</p>
-          <select name="" id="">
-            <option v-for="c in cities">{{ c }}</option>
+          <label>ОБЕРІТЬ МІСТО:</label>
+          <select v-model="selectCity">
+            <option v-for="city in cities" v-bind:key="city">
+              {{ city }}
+            </option>
           </select>
-          <button>
-            <router-link v-bind:to="'/weatherinfo/' + localWeather.name"
-              >Погода</router-link
-            >
-          </button>
+          <router-link v-bind:to="'/weatherinfo/' + selectCity"
+            ><button>Погода</button></router-link
+          >
         </div>
       </div>
       <div class="item">
-        <table >
-          <tr >
-            <td>{{ localWeather.name }}</td>
-            <td>{{ localT.name }}</td>
-            <td v-if="testD">{{ localT.weather[0].main }}</td>
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-        </table>
+        <div class="table-local-weather">
+          <div class="table-item">
+            <p>{{ localWeather.name }}</p>
+            <p><i class="fas fa-cloud-rain"></i></p>
+            <p><i class="fas fa-temperature-low"></i></p>
+            <p><i class="fas fa-cloud-sun"></i></p>
+            <p><i class="fas fa-smog"></i></p>
+            <p><i class="fas fa-cloud-moon"></i></p>
+          </div>
+          <div class="table-item">
+            <p>{{ localWeather.sys.country }}</p>
+            <p>вологість</p>
+            <p>температура</p>
+            <p>погода</p>
+            <p>тиск</p>
+            <p>опис</p>
+          </div>
+          <div class="table-item">
+            <p>[{{ localWeather.coord.lon }};{{ localWeather.coord.lat }}]</p>
+            <p>{{ localWeather.main.humidity }}</p>
+            <p>{{ localWeather.main.temp }}</p>
+            <p>{{ localWeather.weather[0].main }}</p>
+            <p>{{ localWeather.main.pressure }} hpa</p>
+            <p>{{ localWeather.weather[0].description }}</p>
+          </div>
+        </div>
       </div>
     </div>
   </main>
 </template>
 
 <script>
-const LOCAL_DATA_WEATHER = {
-  coord: {
-    lon: "",
-    lat: "",
-  },
-  weather: {
-    id: "",
-    main: "",
-    description: "",
-    icon: "",
-  },
-  base: "",
-  main: {
-    temp: "",
-    feels_like: "",
-    temp_min: "",
-    temp_max: "",
-    pressure: "",
-    humidity: "",
-  },
-  wind: {
-    speed: "",
-    deg: "",
-    gust: "",
-  },
-  dt: "",
-  sys: {
-    country: "",
-    sunrise: "",
-    sunset: "",
-  },
-  name: "",
-};
-
 export default {
   props: {
     id: "",
@@ -104,10 +64,9 @@ export default {
   data() {
     return {
       API_KEY: "7914d5a440960cfd5df3bd0388a7ad0f",
-      localWeather: { ...LOCAL_DATA_WEATHER },
-      localT: {},
+      localWeather: {},
       theme: "",
-      testD: true,
+      selectCity: "",
       city: "",
       cities: [],
       msg: "",
@@ -125,8 +84,8 @@ export default {
             `https://api.openweathermap.org/data/2.5/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=${this.API_KEY}&lang=ua&units=metric`
           )
           .then((response) => {
-            this.localT = { ...response.data };
-            console.log(this.localWeather.coord);
+            this.localWeather = response.data;
+            console.log(this.localWeather);
           });
       });
     } else {

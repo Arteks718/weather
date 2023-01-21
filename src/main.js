@@ -8,7 +8,7 @@ import VueAxios from "vue-axios";
 
 const routes = [
   { path: "/", component: Weather },
-  { path: "/weatherinfo/:name", component: WeatherInfo },
+  { path: "/weatherinfo/:id", component: WeatherInfo, props: true },
 ];
 
 const router = createRouter({
